@@ -20,3 +20,8 @@ Enkel personlig presentasjonsside for Nabil. Én fil: `index.html` (HTML, CSS og
 
 ## Gjenstår
 - Publisering på GitHub Pages, eventuelt eget domene
+
+## SEO
+- Tittel, description, canonical, Open Graph og JSON-LD (ProfilePage + Person) i `<head>`. Hold dem i takt med teksten på siden.
+- Delingsbilde: `img/deling.jpg` (1200x630). Favicon: `favicon.svg`, `img/apple-touch-icon.png`.
+- `robots.txt` og `sitemap.xml` i roten. Oppdater `lastmod` i sitemap ved større endringer.
