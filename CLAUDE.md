@@ -22,6 +22,7 @@ Enkel personlig presentasjonsside for Nabil. Én fil: `index.html` (HTML, CSS og
 - GitHub Pages fra repoet nabiltoure/nabiltoure.github.io, branch main, rot.
 - Eget domene: nabiltoure.no (filen `CNAME`). www.nabiltoure.no peker hit via CNAME i DNS.
 - Push til main publiserer automatisk.
+- Repoet er offentlig (krav for gratis Pages). `_config.yml` hindrer at CLAUDE.md og .claude publiseres på nettsiden, men de er synlige i repoet: ikke skriv noe her som ikke tåler å være offentlig.
 
 ## SEO
 - Tittel, description, canonical (https://nabiltoure.no/), Open Graph og JSON-LD (ProfilePage + Person) i `<head>`. Hold dem i takt med teksten på siden.

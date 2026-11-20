@@ -1,6 +1,4 @@
 User-agent: *
 Allow: /
-Disallow: /CLAUDE.md
-Disallow: /.claude/
 
 Sitemap: https://nabiltoure.no/sitemap.xml
