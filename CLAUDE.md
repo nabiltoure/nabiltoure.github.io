@@ -8,7 +8,7 @@ Enkel personlig presentasjonsside for Nabil. Én fil: `index.html` (HTML, CSS og
 - Footer: bare "© år + fullt navn". Ingen "meninger er mine egne"-tekst.
 - Hovedfokus: Data Engineering og Analytics. AI Governance, revisjonsbakgrunn og resten vises, men dempet.
 - Portrett: `img/portrett.jpg` (400x400, beskåret fra originalbildet).
-- Lenker kun til LinkedIn og GitHub.
+- Lenker kun til LinkedIn, GitHub og e-post (nabiltourei@gmail.com, settes sammen i JS for å unngå spam-roboter).
 
 ## Design
 - Minimalistisk stil inspirert av micio.no: varm hvit bakgrunn med prikkerutenett, Inter Tight.
