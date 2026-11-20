@@ -12,18 +12,19 @@
 /*
 VOICE: rolig, presis, personlig. Ingen salg.
 IDEA: et visittkort lagt på et rutet ark.
-PICTURE: portrett i sirkel, prikkete rutenett i bakgrunnen.
+PICTURE: portrett i sirkel, en liten globus med stedene jeg har bodd, prikkete rutenett i bakgrunnen.
 COLOUR and TYPE: varm hvit og blekk, Inter Tight.
-LAYOUT: smal kolonne, etiketter til venstre, innhold til høyre, stables på mobil.
+LAYOUT: bred side i tre kolonner (person, tekst, globus helt til høyre), fakta som rader under med etikett til venstre. Stables på mobil.
 */
-:root{color-scheme:light dark;--bg:light-dark(#f6f5f2,#121212);--ink:light-dark(#161616,#ececea);--mute:light-dark(#6b6a66,#9a9994);--line:light-dark(#e3e1dc,#2a2a28);--dot:light-dark(#dcdad4,#262624);--chip:light-dark(#ecebe7,#1c1c1b);--ease:cubic-bezier(.2,.8,.2,1)}
+:root{color-scheme:light dark;--bg:light-dark(#f6f5f2,#121212);--ink:light-dark(#161616,#ececea);--mute:light-dark(#6b6a66,#9a9994);--line:light-dark(#e3e1dc,#2a2a28);--dot:light-dark(#dcdad4,#262624);--chip:light-dark(#ecebe7,#1c1c1b);--ease:cubic-bezier(.2,.8,.2,1);
+  --cols:minmax(0,1fr) minmax(0,1.45fr) minmax(0,1fr);--gap:clamp(32px,5vw,72px)}
 :root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
 *{box-sizing:border-box;min-width:0}
 html,body{height:100%}
 body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Inter Tight",system-ui,-apple-system,"Segoe UI",sans-serif;overflow-x:clip;
   background-image:radial-gradient(var(--dot) 1px,transparent 1.2px);background-size:22px 22px;display:flex;flex-direction:column}
 a{color:inherit}
-.wrap{width:100%;max-width:720px;margin:0 auto;padding:0 max(5vw,20px)}
+.wrap{width:100%;max-width:1320px;margin:0 auto;padding:0 max(5vw,20px)}
 header{display:flex;align-items:center;justify-content:space-between;padding-block:24px}
 .mark{font-weight:600;font-size:26px;letter-spacing:-.02em;text-decoration:none;line-height:1}
 .tools{display:flex;align-items:center;gap:14px}
@@ -46,19 +47,18 @@ header{display:flex;align-items:center;justify-content:space-between;padding-blo
 .is-dark .theme:hover .moon{transform:rotate(-24deg) scale(1.1)}
 ::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
 
-.theme:focus-visible,.lang button:focus-visible,a:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
+.theme:focus-visible,.lang button:focus-visible,a:focus-visible,.places button:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
 .theme:focus-visible{border-radius:999px}
 
 main{flex:1;display:flex;align-items:center}
-.grid{display:grid;grid-template-columns:180px minmax(0,1fr);column-gap:40px}
-.card{padding-block:clamp(48px,11vh,128px) 48px;row-gap:0}
+.card{display:grid;grid-template-columns:var(--cols);column-gap:var(--gap);row-gap:40px;padding-block:clamp(40px,9vh,112px) 56px}
 .who{display:flex;flex-direction:column;gap:16px}
-.avatar{width:96px;height:96px;border-radius:50%;background:var(--chip);border:1px solid var(--line);overflow:hidden}
+.avatar{width:112px;height:112px;border-radius:50%;background:var(--chip);border:1px solid var(--line);overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover;display:block}
-h1{font-size:20px;font-weight:500;margin:0;letter-spacing:-.01em;line-height:1.25}
+h1{font-size:22px;font-weight:500;margin:0;letter-spacing:-.015em;line-height:1.25}
 .role{color:var(--mute);font-size:14px;margin:4px 0 0}
 .bio p{margin:0 0 12px;color:var(--mute);max-width:56ch}
-.bio .lead{color:var(--ink);font-size:clamp(20px,2.6vw,24px);line-height:1.35;letter-spacing:-.015em;margin-bottom:16px}
+.bio .lead{color:var(--ink);font-size:clamp(22px,2.4vw,30px);line-height:1.3;letter-spacing:-.02em;margin-bottom:18px}
 .links{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
 /* Logoknapper: magnetisk dragning mot pekeren, fyll som sprer seg fra der pekeren kommer inn, diskret etikett under */
 .links a{position:relative;display:grid;place-items:center;width:44px;height:44px;color:var(--mute);border:1px solid var(--line);border-radius:999px;background:var(--bg);text-decoration:none;
@@ -73,24 +73,63 @@ h1{font-size:20px;font-weight:500;margin:0;letter-spacing:-.01em;line-height:1.2
 .links .tip{position:absolute;top:calc(100% + 10px);left:50%;font-size:12px;letter-spacing:.02em;color:var(--mute);white-space:nowrap;pointer-events:none;opacity:0;transform:translate(-50%,-4px);transition:opacity .35s var(--ease),transform .5s var(--ease)}
 .links a:hover .tip,.links a:focus-visible .tip{opacity:1;transform:translate(-50%,0)}
 
+/* Globus: steder jeg har bodd. Roterer rolig mellom landene, kan dras, og landknappene styrer den */
+.label{font-size:13px;font-weight:500;color:var(--mute);margin:0 0 12px;line-height:1.6}
+.places{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
+.globe{width:100%;max-width:260px;aspect-ratio:1;position:relative}
+.globe svg{width:100%;height:100%;display:block;cursor:grab;touch-action:pan-y;overflow:visible}
+.globe svg:active{cursor:grabbing}
+.globe .sphere{fill:var(--chip)}
+.globe .grat{fill:none;stroke:var(--line);stroke-width:.6}
+.globe .rim{fill:none;stroke:var(--line);stroke-width:1}
+.globe .land{fill:var(--mute);fill-opacity:.22;stroke:var(--chip);stroke-width:.6}
+.globe .land.lived{fill:var(--ink);fill-opacity:.55;transition:fill-opacity .5s var(--ease)}
+.globe .land.lived.active{fill-opacity:1}
+.globe .pin{fill:var(--ink);stroke:var(--chip);stroke-width:1.5}
+.globe .pin-g{transition:opacity .3s var(--ease)}
+.globe .pulse{fill:none;stroke:var(--ink);stroke-width:1;opacity:0;transform-box:fill-box;transform-origin:center}
+.globe .pin-g.active .pulse{animation:pulse 2.2s var(--ease) infinite}
+@keyframes pulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(4.5);opacity:0}}
+.globe .halo{fill:none;stroke:var(--ink);stroke-opacity:.06;stroke-width:10}
+.countries{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;list-style:none;margin:18px -12px 10px 0;padding:0}
+.countries button{font:inherit;font-size:14px;color:var(--mute);background:none;border:1px solid transparent;padding:6px 12px;min-height:36px;border-radius:999px;cursor:pointer;transition:color .3s var(--ease),background-color .3s var(--ease),border-color .3s var(--ease)}
+.countries button:hover{color:var(--ink);border-color:var(--line)}
+.countries button[aria-pressed=true]{color:var(--ink);background:var(--chip);border-color:var(--line)}
+.speaks{font-size:14px;color:var(--mute);margin:0;max-width:34ch}
+.speaks b{font-weight:500;color:var(--ink)}
+
 .facts{border-top:1px solid var(--line);padding-block:8px 40px}
-.row{padding-block:20px;border-bottom:1px solid var(--line)}
-.row:last-child{border-bottom:0}
-.row h2{font-size:13px;font-weight:500;color:var(--mute);margin:0;line-height:1.6}
-.row ul{list-style:none;margin:0;padding:0;font-size:15px}
-.row li{display:flex;justify-content:space-between;gap:16px;padding-block:3px}
-.row li span{color:var(--mute);font-size:14px;text-align:right}
-.row .minor{color:var(--mute)}
+.facts>div{display:grid;grid-template-columns:var(--cols);column-gap:var(--gap);padding-block:20px;border-bottom:1px solid var(--line)}
+.facts>div:last-child{border-bottom:0}
+.facts .label{margin:0}
+.facts ul{grid-column:2/-1;list-style:none;margin:0;padding:0;font-size:15px}
+.facts li{display:flex;justify-content:space-between;gap:16px;padding-block:3px}
+.facts li span{color:var(--mute);font-size:14px;text-align:right}
+.facts li{white-space:nowrap}.facts li span{white-space:normal}
+.minor{color:var(--mute)}
 
 footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:var(--mute)}
 [data-lang=en] .no,[data-lang=no] .en{display:none}
-@media(max-width:600px){
-  .grid{grid-template-columns:1fr;row-gap:8px}
-  .card{row-gap:24px}
-  .who{flex-direction:row;align-items:center}
-  .avatar{width:72px;height:72px}
+@media(max-width:960px){
+  :root{--cols:minmax(0,1fr) minmax(0,1.6fr)}
+  .places{grid-column:1/-1;display:grid;grid-template-columns:200px minmax(0,1fr);column-gap:var(--gap);align-items:center;border-top:1px solid var(--line);padding-top:32px}
+  .places .label{grid-column:1/-1}
+  .places .globe{grid-row:2/span 2}
+  .countries{margin-top:0;align-self:end}
+  .speaks{align-self:start}
+  .places{align-items:center;text-align:left}
+  .countries{justify-content:flex-start;margin-right:0}
 }
-@media(prefers-reduced-motion:reduce){*,::before{transition:none!important}.links a:hover{transform:none}}
+@media(max-width:600px){
+  :root{--cols:minmax(0,1fr)}
+  .card{row-gap:28px}
+  .who{flex-direction:row;align-items:center}
+  .avatar{width:80px;height:80px}
+  .places{grid-template-columns:132px minmax(0,1fr);column-gap:20px}
+  .facts>div{row-gap:6px}
+  .facts ul{grid-column:1}
+}
+@media(prefers-reduced-motion:reduce){*,::before{transition:none!important;animation:none!important}.links a:hover{transform:none}}
 </style>
 </head>
 <body data-lang="no">
@@ -111,9 +150,9 @@ footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:
 
 <main>
   <div class="wrap">
-    <section class="card grid">
+    <section class="card">
       <div class="who">
-        <div class="avatar"><img src="img/portrett.jpg" alt="Portrett av Nabil Toure Idrissou" width="96" height="96"></div>
+        <div class="avatar"><img src="img/portrett.jpg" alt="Portrett av Nabil Toure Idrissou" width="112" height="112"></div>
         <div>
           <h1>Nabil Toure Idrissou</h1>
           <p class="role">Data Engineering &amp; Analytics<br>Oslo</p>
@@ -137,27 +176,38 @@ footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:
           </a>
         </div>
       </div>
+      <aside class="places">
+        <h2 class="label"><span class="no">Har bodd i</span><span class="en">Have lived in</span></h2>
+        <div class="globe" id="globe" role="img" aria-label="Globus som viser Norge, England og Togo"></div>
+        <ul class="countries" aria-label="Land">
+          <li><button type="button" data-place="0" aria-pressed="true"><span class="no">Norge</span><span class="en">Norway</span></button></li>
+          <li><button type="button" data-place="1" aria-pressed="false">England</button></li>
+          <li><button type="button" data-place="2" aria-pressed="false">Togo</button></li>
+        </ul>
+        <p class="speaks no">Jeg snakker <b>norsk</b>, <b>engelsk</b> og <b>fransk</b>.</p>
+        <p class="speaks en">I speak <b>Norwegian</b>, <b>English</b> and <b>French</b>.</p>
+      </aside>
     </section>
 
     <section class="facts">
-      <div class="row grid">
-        <h2 class="no">Fokus</h2><h2 class="en">Focus</h2>
+      <div>
+        <h2 class="label"><span class="no">Fokus</span><span class="en">Focus</span></h2>
         <ul>
           <li>Data Engineering<span>Snowflake, Databricks, Microsoft Fabric, dbt</span></li>
           <li>Analytics<span>SQL, Power BI, Python</span></li>
           <li class="minor">AI Governance<span>ISO 42001, NIST AI RMF</span></li>
         </ul>
       </div>
-      <div class="row grid">
-        <h2 class="no">Erfaring</h2><h2 class="en">Experience</h2>
+      <div>
+        <h2 class="label"><span class="no">Erfaring</span><span class="en">Experience</span></h2>
         <ul>
           <li>Vivicta<span class="no">2026 til nå</span><span class="en">2026 to present</span></li>
           <li>BDO<span class="no">2021 til 2026</span><span class="en">2021 to 2026</span></li>
           <li>Nordea<span class="no">2018 til 2021</span><span class="en">2018 to 2021</span></li>
         </ul>
       </div>
-      <div class="row grid">
-        <h2 class="no">Annet</h2><h2 class="en">Other</h2>
+      <div>
+        <h2 class="label"><span class="no">Annet</span><span class="en">Other</span></h2>
         <ul class="minor">
           <li>Imperial College Business School</li>
           <li>DN 40 under 40</li>
@@ -219,6 +269,7 @@ footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:
       );
     });
   });
+
   // Logoknappene trekkes svakt mot pekeren, og fyllet starter der pekeren kommer inn og går ut
   document.querySelectorAll('.links a').forEach(a => {
     const origin = e => {
@@ -240,6 +291,106 @@ footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:
     });
   });
 }
+</script>
+<script src="https://cdn.jsdelivr.net/npm/d3@7.9.0/dist/d3.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/topojson-client@3.1.0/dist/topojson-client.min.js"></script>
+<script>
+// Globus: Norge, England og Togo. Går rolig fra land til land, kan dras med musen eller fingeren.
+(async () => {
+  const el = document.getElementById('globe');
+  const buttons = [...document.querySelectorAll('.countries button')];
+  if (!window.d3 || !window.topojson) { el.hidden = true; return; }
+  let world;
+  try { world = await d3.json('https://cdn.jsdelivr.net/npm/world-atlas@2.0.2/countries-110m.json'); }
+  catch (e) { el.hidden = true; return; }
+
+  const reduced = matchMedia('(prefers-reduced-motion: reduce)');
+  const places = [
+    { name: 'Norway', at: [10.5, 61.5] },
+    { name: 'United Kingdom', at: [-1.6, 52.8] },
+    { name: 'Togo', at: [0.9, 8.6] }
+  ];
+  const lived = new Set(places.map(p => p.name));
+  const countries = topojson.feature(world, world.objects.countries).features;
+  const size = 260, r = size / 2 - 8;
+  const zoom = 1.75;
+  const view = p => [-p.at[0], -p.at[1] * .85, 0];
+
+  const proj = d3.geoOrthographic().scale(r * zoom).translate([size / 2, size / 2]).clipAngle(90).precision(.4).rotate(view(places[0]));
+  const path = d3.geoPath(proj);
+  const svg = d3.select(el).append('svg').attr('viewBox', `0 0 ${size} ${size}`).attr('aria-hidden', 'true');
+  // Globusen vises forstørret gjennom et rundt vindu, så landene blir tydelige
+  const c = size / 2;
+  svg.append('clipPath').attr('id', 'globe-clip').append('circle').attr('cx', c).attr('cy', c).attr('r', r);
+  svg.append('circle').attr('class', 'halo').attr('cx', c).attr('cy', c).attr('r', r + 5);
+  svg.append('circle').attr('class', 'sphere').attr('cx', c).attr('cy', c).attr('r', r);
+  const inner = svg.append('g').attr('clip-path', 'url(#globe-clip)');
+  const shapes = [
+    inner.append('path').attr('class', 'sphere').datum({ type: 'Sphere' }),
+    inner.append('path').attr('class', 'grat').datum(d3.geoGraticule10())
+  ];
+  const land = inner.append('g').selectAll('path').data(countries).join('path')
+    .attr('class', d => lived.has(d.properties.name) ? 'land lived' : 'land');
+  svg.append('circle').attr('class', 'rim').attr('cx', c).attr('cy', c).attr('r', r);
+  const pins = svg.append('g').selectAll('g').data(places).join('g').attr('class', 'pin-g');
+  pins.append('circle').attr('class', 'pulse').attr('r', 3.5);
+  pins.append('circle').attr('class', 'pin').attr('r', 3.5);
+
+  let active = 0;
+  const draw = () => {
+    shapes.forEach(s => s.attr('d', path));
+    land.attr('d', path).classed('active', d => d.properties.name === places[active].name);
+    const centre = proj.invert([size / 2, size / 2]);
+    pins.attr('transform', d => { const [x, y] = proj(d.at); return `translate(${x},${y})`; })
+      .attr('opacity', d => { const [x, y] = proj(d.at); return d3.geoDistance(d.at, centre) < 1.4 && Math.hypot(x - c, y - c) < r - 6 ? 1 : 0; })
+      .classed('active', (d, i) => i === active);
+  };
+
+  let tween = null;
+  const goTo = i => {
+    active = i;
+    buttons.forEach((b, j) => b.setAttribute('aria-pressed', j === i));
+    if (tween) tween.stop();
+    const to = view(places[i]);
+    if (reduced.matches) { proj.rotate(to); draw(); return; }
+    const interp = d3.interpolate(proj.rotate(), to);
+    tween = d3.timer(t => {
+      const k = Math.min(1, t / 1400);
+      proj.rotate(interp(d3.easeCubicInOut(k)));
+      draw();
+      if (k === 1) tween.stop();
+    });
+  };
+
+  // Automatisk runde mellom landene, pauses når du styrer selv eller globusen er utenfor skjermen
+  let auto = null, resume = null, visible = true;
+  const stop = () => { clearInterval(auto); clearTimeout(resume); auto = null; };
+  const start = (delay = 0) => {
+    stop();
+    if (reduced.matches || !visible) return;
+    resume = setTimeout(() => { auto = setInterval(() => goTo((active + 1) % places.length), 3800); }, delay);
+  };
+  new IntersectionObserver(([e]) => { visible = e.isIntersecting; visible ? start() : stop(); }).observe(el);
+
+  buttons.forEach((b, i) => {
+    b.addEventListener('pointerenter', () => { stop(); goTo(i); });
+    b.addEventListener('focus', () => { stop(); goTo(i); });
+    b.addEventListener('click', () => { stop(); goTo(i); });
+    b.addEventListener('pointerleave', () => start(1500));
+    b.addEventListener('blur', () => start(1500));
+  });
+
+  svg.call(d3.drag()
+    .on('start', () => { stop(); if (tween) tween.stop(); })
+    .on('drag', e => {
+      const [l, p] = proj.rotate();
+      proj.rotate([l + e.dx * .3, Math.max(-75, Math.min(75, p - e.dy * .3)), 0]);
+      draw();
+    })
+    .on('end', () => start(2500)));
+
+  draw();
+})();
 </script>
 </body>
 </html>

@@ -11,7 +11,9 @@ Enkel personlig presentasjonsside for Nabil. Én fil: `index.html` (HTML, CSS og
 - Lenker kun til LinkedIn og GitHub.
 
 ## Design
-- Minimalistisk stil inspirert av micio.no: varm hvit bakgrunn med prikkerutenett, Inter Tight, smal kolonne.
+- Minimalistisk stil inspirert av micio.no: varm hvit bakgrunn med prikkerutenett, Inter Tight.
+- Bred layout (maks 1320px) i tre kolonner: person, tekst, globus. Globusen står helt til høyre. Fokus, Erfaring og Annet er rader under hverandre, etikett til venstre og innhold i tekstkolonnen.
+- Globus (D3 + world-atlas fra jsDelivr) viser landene jeg har bodd i: Norge, England (UK-formen) og Togo. Under: språk, norsk, engelsk og fransk (ikke skriv morsmål/native). Feiler bibliotekene, skjules globusen.
 - Norsk og engelsk via `data-lang` på body (klassene `.no` og `.en`).
 - Lyst og mørkt tema: følger systemet, kan overstyres med knapp, valget lagres i localStorage. Knappen fylles og ikonet roterer ved hover; ved klikk sprer nytt tema seg som en sirkel fra knappen (View Transitions, av ved redusert bevegelse).
 - Ikke bruk tankestrek eller bindestrek som skilletegn i tekst; bruk komma, kolon eller egne setninger.
