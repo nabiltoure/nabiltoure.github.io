@@ -56,7 +56,7 @@
     "award": "DN 40 under 40",
     "address": { "@type": "PostalAddress", "addressLocality": "Oslo", "addressCountry": "NO" },
     "knowsLanguage": ["nb", "en", "fr"],
-    "knowsAbout": ["Data Engineering", "Analytics", "Agentic AI Development", "React", "TypeScript", "Model Context Protocol (MCP)", "Snowflake", "Databricks", "Microsoft Fabric", "dbt", "SQL", "Power BI", "Python", "AI Governance"],
+    "knowsAbout": ["Data Engineering", "Analytics", "Agentic AI Development", "Retrieval-Augmented Generation (RAG)", "Model Context Protocol (MCP)", "TypeScript", "React", "Snowflake", "Databricks", "Microsoft Fabric", "dbt", "SQL", "Power BI", "Python", "AI Governance"],
     "sameAs": [
       "https://www.linkedin.com/in/nabil-toure-idrissou-4705b9b6/",
       "https://github.com/nabiltoure"
@@ -170,6 +170,11 @@ h1{font-size:22px;font-weight:500;margin:0;letter-spacing:-.015em;line-height:1.
 .minor{color:var(--mute)}
 
 footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px),20px);font-size:13px;color:var(--mute)}
+/* Skriveeffekt på introen: resten av teksten er usynlig, men tar plass, så ingenting hopper */
+.sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+.typing .ghost{visibility:hidden}
+.typing .caret{display:inline-block;width:2px;height:1em;margin-right:-2px;background:currentColor;vertical-align:-.14em;animation:blink 1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
 [data-lang=en] .no,[data-lang=no] .en{display:none}
 @media(max-width:960px){
   :root{--cols:minmax(0,1fr) minmax(0,1.6fr)}
@@ -261,7 +266,7 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
         <ul>
           <li>Data Engineering<span>Snowflake, Databricks, Microsoft Fabric, dbt</span></li>
           <li>Analytics<span>SQL, Power BI, Python</span></li>
-          <li>Agentic Development<span>React, TypeScript, MCP</span></li>
+          <li>Agentic Development<span>RAG, MCP, TypeScript, React</span></li>
           <li class="minor">AI Governance<span>ISO 42001, NIST AI RMF</span></li>
         </ul>
       </div>
@@ -316,6 +321,47 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
   if (theme === 'dark' || theme === 'light') root.dataset.theme = theme;
   paint();
   mq.addEventListener('change', paint);
+
+  // Introen skrives inn første gang man lander på siden (én gang per økt).
+  // Teksten står ferdig i HTML-en, så Google og skjermlesere får hele teksten.
+  (() => {
+    let seen = false;
+    try { seen = sessionStorage.getItem('typed') === '1'; } catch (e) {}
+    if (seen || reduced.matches) return;
+    try { sessionStorage.setItem('typed', '1'); } catch (e) {}
+    const esc = t => t.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
+    const lang = document.body.dataset.lang === 'en' ? 'en' : 'no';
+    const jobs = [...document.querySelectorAll('.bio p.lead.' + lang)].map((el, i) => ({ el, full: el.textContent, speed: i === 0 ? 24 : 8 }));
+    const render = (j, n, caret) => {
+      j.el.innerHTML = '<span class="sr-only">' + esc(j.full) + '</span><span aria-hidden="true">' +
+        esc(j.full.slice(0, n)) + (caret ? '<span class="caret"></span>' : '') +
+        '<span class="ghost">' + esc(j.full.slice(n)) + '</span></span>';
+    };
+    let done = false;
+    const finish = () => {
+      if (done) return;
+      done = true;
+      jobs.forEach(j => { j.el.textContent = j.full; j.el.classList.remove('typing'); });
+      ['pointerdown', 'keydown'].forEach(t => removeEventListener(t, finish));
+    };
+    jobs.forEach(j => { j.el.classList.add('typing'); render(j, 0, false); });
+    ['pointerdown', 'keydown'].forEach(t => addEventListener(t, finish));
+    const sleep = ms => new Promise(r => setTimeout(r, ms));
+    (async () => {
+      await sleep(300);
+      for (const j of jobs) {
+        for (let n = 0; n <= j.full.length; n++) {
+          if (done) return;
+          render(j, n, true);
+          const ch = j.full[n - 1];
+          await sleep(j.speed * (.6 + Math.random() * .8) + (ch === '.' || ch === ',' ? j.speed * 5 : 0));
+        }
+        if (!done) render(j, j.full.length, false);
+      }
+      await sleep(400);
+      finish();
+    })();
+  })();
 
   // Nytt tema fader inn mens det gamle fader ut
   btn.addEventListener('click', () => {
