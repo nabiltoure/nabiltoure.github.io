@@ -18,10 +18,12 @@ Enkel personlig presentasjonsside for Nabil. Én fil: `index.html` (HTML, CSS og
 - Lyst og mørkt tema: følger systemet, kan overstyres med knapp, valget lagres i localStorage. Knappen fylles og ikonet roterer ved hover; ved klikk fader gammelt tema ut og nytt inn (View Transitions, CSS-fallback, av ved redusert bevegelse).
 - Ikke bruk tankestrek eller bindestrek som skilletegn i tekst; bruk komma, kolon eller egne setninger.
 
-## Gjenstår
-- Publisering på GitHub Pages, eventuelt eget domene
+## Publisering
+- GitHub Pages fra repoet nabiltoure/nabiltoure.github.io, branch main, rot.
+- Eget domene: nabiltoure.no (filen `CNAME`). www.nabiltoure.no peker hit via CNAME i DNS.
+- Push til main publiserer automatisk.
 
 ## SEO
-- Tittel, description, canonical, Open Graph og JSON-LD (ProfilePage + Person) i `<head>`. Hold dem i takt med teksten på siden.
+- Tittel, description, canonical (https://nabiltoure.no/), Open Graph og JSON-LD (ProfilePage + Person) i `<head>`. Hold dem i takt med teksten på siden.
 - Delingsbilde: `img/deling.jpg` (1200x630). Favicon: `favicon.svg`, `img/apple-touch-icon.png`.
 - `robots.txt` og `sitemap.xml` i roten. Oppdater `lastmod` i sitemap ved større endringer.
