@@ -25,7 +25,7 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.6 "Inter Tight",
   background-image:radial-gradient(var(--dot) 1px,transparent 1.2px);background-size:22px 22px;display:flex;flex-direction:column}
 a{color:inherit}
 .wrap{width:100%;max-width:1320px;margin:0 auto;padding:0 max(5vw,20px)}
-header{display:flex;align-items:center;justify-content:space-between;padding-block:24px}
+header{display:flex;align-items:center;justify-content:space-between;padding-block:clamp(10px,calc(4vh - 16px),24px)}
 .mark{font-weight:600;font-size:26px;letter-spacing:-.02em;text-decoration:none;line-height:1}
 .tools{display:flex;align-items:center;gap:14px}
 .lang{display:flex;gap:6px;align-items:center;color:var(--mute);font-size:13px}
@@ -45,21 +45,23 @@ header{display:flex;align-items:center;justify-content:space-between;padding-blo
 .is-dark .theme .sun{opacity:0;transform:rotate(90deg) scale(.4)}
 .is-dark .theme .moon{opacity:1;transform:none}
 .is-dark .theme:hover .moon{transform:rotate(-24deg) scale(1.1)}
-::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+/* Temabytte: gammel og ny farge toner over i hverandre */
+::view-transition-old(root),::view-transition-new(root){animation-duration:.7s;animation-timing-function:cubic-bezier(.4,0,.2,1)}
+.theme-fade,.theme-fade *,.theme-fade *::before{transition:background-color .7s ease,color .7s ease,border-color .7s ease,fill .7s ease,stroke .7s ease!important}
 
 .theme:focus-visible,.lang button:focus-visible,a:focus-visible,.places button:focus-visible{outline:2px solid var(--ink);outline-offset:3px;border-radius:4px}
 .theme:focus-visible{border-radius:999px}
 
 main{flex:1;display:flex;align-items:center}
-.card{display:grid;grid-template-columns:var(--cols);column-gap:var(--gap);row-gap:40px;padding-block:clamp(40px,9vh,112px) 56px}
+.card{display:grid;grid-template-columns:var(--cols);column-gap:var(--gap);row-gap:32px;padding-block:clamp(8px,calc(12vh - 72px),80px) clamp(14px,calc(8vh - 34px),44px)}
 .who{display:flex;flex-direction:column;gap:16px}
-.avatar{width:112px;height:112px;border-radius:50%;background:var(--chip);border:1px solid var(--line);overflow:hidden}
+.avatar{width:clamp(80px,calc(13vh - 19px),112px);height:clamp(80px,calc(13vh - 19px),112px);border-radius:50%;background:var(--chip);border:1px solid var(--line);overflow:hidden}
 .avatar img{width:100%;height:100%;object-fit:cover;display:block}
 h1{font-size:22px;font-weight:500;margin:0;letter-spacing:-.015em;line-height:1.25}
 .role{color:var(--mute);font-size:14px;margin:4px 0 0}
 .bio p{margin:0 0 12px;color:var(--mute);max-width:56ch}
-.bio .lead{color:var(--ink);font-size:clamp(22px,2.4vw,30px);line-height:1.3;letter-spacing:-.02em;margin-bottom:18px}
-.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
+.bio .lead{color:var(--ink);font-size:clamp(20px,min(2.2vw,calc(5vh - 14px)),30px);line-height:1.3;letter-spacing:-.02em;margin-bottom:clamp(12px,calc(3vh - 10px),20px)}
+.links{display:flex;flex-wrap:wrap;gap:10px;margin-top:clamp(14px,calc(4vh - 14px),28px)}
 /* Logoknapper: magnetisk dragning mot pekeren, fyll som sprer seg fra der pekeren kommer inn, diskret etikett under */
 .links a{position:relative;display:grid;place-items:center;width:44px;height:44px;color:var(--mute);border:1px solid var(--line);border-radius:999px;background:var(--bg);text-decoration:none;
   transform:translate(var(--tx,0),var(--ty,0)) scale(var(--s,1));transition:color .5s var(--ease),border-color .5s var(--ease),transform .5s var(--ease)}
@@ -74,9 +76,9 @@ h1{font-size:22px;font-weight:500;margin:0;letter-spacing:-.015em;line-height:1.
 .links a:hover .tip,.links a:focus-visible .tip{opacity:1;transform:translate(-50%,0)}
 
 /* Globus: steder jeg har bodd. Roterer rolig mellom landene, kan dras, og landknappene styrer den */
-.label{font-size:13px;font-weight:500;color:var(--mute);margin:0 0 12px;line-height:1.6}
+.label{font-size:13px;font-weight:500;color:var(--mute);margin:0 0 8px;line-height:1.6}
 .places{display:flex;flex-direction:column;align-items:flex-end;text-align:right}
-.globe{width:100%;max-width:260px;aspect-ratio:1;position:relative}
+.globe{width:100%;max-width:clamp(150px,calc(36vh - 104px),240px);aspect-ratio:1;position:relative}
 .globe svg{width:100%;height:100%;display:block;cursor:grab;touch-action:pan-y;overflow:visible}
 .globe svg:active{cursor:grabbing}
 .globe .sphere{fill:var(--chip)}
@@ -91,24 +93,24 @@ h1{font-size:22px;font-weight:500;margin:0;letter-spacing:-.015em;line-height:1.
 .globe .pin-g.active .pulse{animation:pulse 2.2s var(--ease) infinite}
 @keyframes pulse{0%{transform:scale(1);opacity:.8}100%{transform:scale(4.5);opacity:0}}
 .globe .halo{fill:none;stroke:var(--ink);stroke-opacity:.06;stroke-width:10}
-.countries{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;list-style:none;margin:18px -12px 10px 0;padding:0}
+.countries{display:flex;flex-wrap:wrap;justify-content:flex-end;gap:4px;list-style:none;margin:clamp(10px,calc(3vh - 12px),18px) -12px 6px 0;padding:0}
 .countries button{font:inherit;font-size:14px;color:var(--mute);background:none;border:1px solid transparent;padding:6px 12px;min-height:36px;border-radius:999px;cursor:pointer;transition:color .3s var(--ease),background-color .3s var(--ease),border-color .3s var(--ease)}
 .countries button:hover{color:var(--ink);border-color:var(--line)}
 .countries button[aria-pressed=true]{color:var(--ink);background:var(--chip);border-color:var(--line)}
 .speaks{font-size:14px;color:var(--mute);margin:0;max-width:34ch}
 .speaks b{font-weight:500;color:var(--ink)}
 
-.facts{border-top:1px solid var(--line);padding-block:8px 40px}
-.facts>div{display:grid;grid-template-columns:var(--cols);column-gap:var(--gap);padding-block:20px;border-bottom:1px solid var(--line)}
+.facts{border-top:1px solid var(--line);padding-block:4px clamp(6px,calc(6vh - 38px),36px)}
+.facts>div{display:grid;grid-template-columns:var(--cols);column-gap:var(--gap);padding-block:clamp(5px,calc(4vh - 26px),16px);border-bottom:1px solid var(--line)}
 .facts>div:last-child{border-bottom:0}
 .facts .label{margin:0}
 .facts ul{grid-column:2/-1;list-style:none;margin:0;padding:0;font-size:15px}
-.facts li{display:flex;justify-content:space-between;gap:16px;padding-block:3px}
+.facts li{display:flex;justify-content:space-between;gap:16px;padding-block:clamp(1px,calc(.8vh - 5px),2.5px)}
 .facts li span{color:var(--mute);font-size:14px;text-align:right}
 .facts li{white-space:nowrap}.facts li span{white-space:normal}
 .minor{color:var(--mute)}
 
-footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:var(--mute)}
+footer{border-top:1px solid var(--line);padding-block:clamp(8px,calc(3vh - 11px),20px);font-size:13px;color:var(--mute)}
 [data-lang=en] .no,[data-lang=no] .en{display:none}
 @media(max-width:960px){
   :root{--cols:minmax(0,1fr) minmax(0,1.6fr)}
@@ -152,7 +154,7 @@ footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:
   <div class="wrap">
     <section class="card">
       <div class="who">
-        <div class="avatar"><img src="img/portrett.jpg" alt="Portrett av Nabil Toure Idrissou" width="112" height="112"></div>
+        <div class="avatar"><img src="img/portrett.jpg" alt="Portrett av Nabil Toure Idrissou" width="96" height="96"></div>
         <div>
           <h1>Nabil Toure Idrissou</h1>
           <p class="role">Data Engineering &amp; Analytics<br>Oslo</p>
@@ -250,7 +252,7 @@ footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:
   paint();
   mq.addEventListener('change', paint);
 
-  // Nytt tema sprer seg som en sirkel ut fra knappen
+  // Nytt tema fader inn mens det gamle fader ut
   btn.addEventListener('click', () => {
     const next = isDark() ? 'light' : 'dark';
     const apply = () => {
@@ -258,16 +260,12 @@ footer{border-top:1px solid var(--line);padding-block:20px;font-size:13px;color:
       paint();
       try { localStorage.setItem('theme', next); } catch (e) {}
     };
-    if (!document.startViewTransition || reduced.matches) { apply(); return; }
-    const r = btn.getBoundingClientRect();
-    const x = r.left + r.width / 2, y = r.top + r.height / 2;
-    const end = Math.hypot(Math.max(x, innerWidth - x), Math.max(y, innerHeight - y));
-    document.startViewTransition(apply).ready.then(() => {
-      root.animate(
-        { clipPath: [`circle(0px at ${x}px ${y}px)`, `circle(${end}px at ${x}px ${y}px)`] },
-        { duration: 600, easing: 'cubic-bezier(.2,.8,.2,1)', pseudoElement: '::view-transition-new(root)' }
-      );
-    });
+    if (reduced.matches) { apply(); return; }
+    if (document.startViewTransition) { document.startViewTransition(apply); return; }
+    // Nettlesere uten View Transitions: fade farger med vanlige CSS-overganger
+    root.classList.add('theme-fade');
+    apply();
+    setTimeout(() => root.classList.remove('theme-fade'), 750);
   });
 
   // Logoknappene trekkes svakt mot pekeren, og fyllet starter der pekeren kommer inn og går ut
