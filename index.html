@@ -173,6 +173,9 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
 /* Skriveeffekt på introen: resten av teksten er usynlig, men tar plass, så ingenting hopper */
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .typing .ghost{visibility:hidden}
+.who,.links,.places,.facts,footer{transition:opacity .7s ease var(--d,0s),transform .7s ease var(--d,0s)}
+.links{--d:.04s}.places{--d:.1s}.facts{--d:.2s}footer{--d:.3s}
+.typing :is(.who,.links,.places,.facts,footer){opacity:0;transform:translateY(8px);transition:none}
 .typing .caret{display:inline-block;width:2px;height:1em;margin-right:-2px;background:currentColor;vertical-align:-.14em;animation:blink 1s steps(1) infinite}
 @keyframes blink{50%{opacity:0}}
 [data-lang=en] .no,[data-lang=no] .en{display:none}
@@ -322,43 +325,61 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
   paint();
   mq.addEventListener('change', paint);
 
-  // Introen skrives inn første gang man lander på siden (én gang per økt).
-  // Teksten står ferdig i HTML-en, så Google og skjermlesere får hele teksten.
+  // Teksten i midten skrives inn første gang man lander på siden (én gang per økt),
+  // og resten av siden fader inn etterpå. Teksten står ferdig i HTML-en, så Google får alt.
+  // Teksten som ikke er skrevet ennå ligger usynlig på plass, så oppsettet ikke hopper.
   (() => {
     let seen = false;
     try { seen = sessionStorage.getItem('typed') === '1'; } catch (e) {}
     if (seen || reduced.matches) return;
     try { sessionStorage.setItem('typed', '1'); } catch (e) {}
-    const esc = t => t.replace(/[&<>]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;' }[c]));
-    const lang = document.body.dataset.lang === 'en' ? 'en' : 'no';
-    const jobs = [...document.querySelectorAll('.bio p.lead.' + lang)].map((el, i) => ({ el, full: el.textContent, speed: i === 0 ? 24 : 8 }));
-    const render = (j, n, caret) => {
-      j.el.innerHTML = '<span class="sr-only">' + esc(j.full) + '</span><span aria-hidden="true">' +
-        esc(j.full.slice(0, n)) + (caret ? '<span class="caret"></span>' : '') +
-        '<span class="ghost">' + esc(j.full.slice(n)) + '</span></span>';
-    };
+    const jobs = [];
+    document.querySelectorAll('.bio > p').forEach(scope => {
+      if (!scope.getClientRects().length) return;
+      const walker = document.createTreeWalker(scope, NodeFilter.SHOW_TEXT);
+      while (walker.nextNode()) {
+        const node = walker.currentNode;
+        if (node.nodeValue.trim()) jobs.push({ node, full: node.nodeValue, speed: scope.classList.contains('lead') ? 15 : 5 });
+      }
+    });
+    if (!jobs.length) return;
+    const caret = document.createElement('span');
+    caret.className = 'caret';
+    jobs.forEach(j => {
+      j.ghost = document.createElement('span');
+      j.ghost.className = 'ghost';
+      j.ghost.textContent = j.full;
+      j.node.nodeValue = '';
+      j.node.after(j.ghost);
+    });
+    document.querySelector('main').setAttribute('aria-busy', 'true');
+    document.body.classList.add('typing');
     let done = false;
     const finish = () => {
       if (done) return;
       done = true;
-      jobs.forEach(j => { j.el.textContent = j.full; j.el.classList.remove('typing'); });
+      jobs.forEach(j => { j.node.nodeValue = j.full; j.ghost.remove(); });
+      caret.remove();
+      document.body.classList.remove('typing');
+      document.querySelector('main').removeAttribute('aria-busy');
       ['pointerdown', 'keydown'].forEach(t => removeEventListener(t, finish));
     };
-    jobs.forEach(j => { j.el.classList.add('typing'); render(j, 0, false); });
     ['pointerdown', 'keydown'].forEach(t => addEventListener(t, finish));
     const sleep = ms => new Promise(r => setTimeout(r, ms));
     (async () => {
-      await sleep(300);
+      await sleep(200);
       for (const j of jobs) {
-        for (let n = 0; n <= j.full.length; n++) {
+        if (done) return;
+        j.node.after(caret);
+        for (let n = 1; n <= j.full.length; n++) {
           if (done) return;
-          render(j, n, true);
+          j.node.nodeValue = j.full.slice(0, n);
+          j.ghost.textContent = j.full.slice(n);
           const ch = j.full[n - 1];
           await sleep(j.speed * (.6 + Math.random() * .8) + (ch === '.' || ch === ',' ? j.speed * 5 : 0));
         }
-        if (!done) render(j, j.full.length, false);
       }
-      await sleep(400);
+      await sleep(200);
       finish();
     })();
   })();
