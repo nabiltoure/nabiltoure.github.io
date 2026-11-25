@@ -173,6 +173,12 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
 /* Skriveeffekt på introen: resten av teksten er usynlig, men tar plass, så ingenting hopper */
 .sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 .typing .ghost{visibility:hidden}
+/* Velkomstskjerm: mørk bakgrunn med hilsen i midten, vises før siden */
+#hello{position:fixed;inset:0;z-index:50;display:grid;place-items:center;padding:24px;background:#121212;color:#ececea;
+  background-image:radial-gradient(#262624 1px,transparent 1.2px);background-size:22px 22px;transition:opacity .6s ease}
+#hello[hidden]{display:none}
+#hello.out{opacity:0}
+#hello p{margin:0;font-size:clamp(28px,5vw,56px);font-weight:500;letter-spacing:-.02em;line-height:1.2;text-align:center}
 .who,.links,.places,.facts,footer{transition:opacity .7s ease var(--d,0s),transform .7s ease var(--d,0s)}
 .links{--d:.04s}.places{--d:.1s}.facts{--d:.2s}footer{--d:.3s}
 .typing :is(.who,.links,.places,.facts,footer){opacity:0;transform:translateY(8px);transition:none}
@@ -202,6 +208,7 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
 </style>
 </head>
 <body data-lang="no">
+<div id="hello" aria-hidden="true" hidden><p></p></div>
 <div class="wrap">
   <header>
     <a class="mark" href="#" aria-label="Til toppen">N</a>
@@ -345,6 +352,20 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
     if (!jobs.length) return;
     const caret = document.createElement('span');
     caret.className = 'caret';
+
+    // Velkomsthilsen: "Hei" på språket nettleseren er satt til, ingen oppslag mot eksterne tjenester
+    const greetings = { no: 'Hei', nb: 'Hei', nn: 'Hei', sv: 'Hej', da: 'Hej', fi: 'Hei', is: 'Hæ', en: 'Hi',
+      de: 'Hallo', nl: 'Hallo', fr: 'Salut', es: 'Hola', it: 'Ciao', pt: 'Olá', pl: 'Cześć', cs: 'Ahoj', sk: 'Ahoj',
+      ru: 'Привет', uk: 'Привіт', tr: 'Merhaba', el: 'Γεια', ar: 'مرحبا', he: 'שלום', fa: 'سلام', hi: 'नमस्ते',
+      zh: '你好', ja: 'こんにちは', ko: '안녕하세요', sw: 'Jambo', id: 'Halo', vi: 'Xin chào', th: 'สวัสดี' };
+    const code = ((navigator.languages && navigator.languages[0]) || navigator.language || 'en').toLowerCase().split('-')[0];
+    const hello = document.getElementById('hello');
+    const helloText = document.createTextNode('');
+    const helloJob = { node: helloText, full: (greetings[code] || 'Hi') + ' friend, let\'s connect!', speed: 45 };
+    hello.querySelector('p').append(helloText);
+    hello.hidden = false;
+    jobs.unshift(helloJob);
+
     jobs.forEach(j => {
       j.ghost = document.createElement('span');
       j.ghost.className = 'ghost';
@@ -360,6 +381,7 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
       done = true;
       jobs.forEach(j => { j.node.nodeValue = j.full; j.ghost.remove(); });
       caret.remove();
+      hello.hidden = true;
       document.body.classList.remove('typing');
       document.querySelector('main').removeAttribute('aria-busy');
       ['pointerdown', 'keydown'].forEach(t => removeEventListener(t, finish));
@@ -377,6 +399,15 @@ footer{border-top:1px solid var(--line);padding-block:clamp(6px,calc(3vh - 11px)
           j.ghost.textContent = j.full.slice(n);
           const ch = j.full[n - 1];
           await sleep(j.speed * (.6 + Math.random() * .8) + (ch === '.' || ch === ',' ? j.speed * 5 : 0));
+        }
+        if (j === helloJob) {
+          // Hilsenen blir stående litt, så fader velkomstskjermen ut og siden skrives inn
+          await sleep(900);
+          if (done) return;
+          hello.classList.add('out');
+          await sleep(600);
+          if (done) return;
+          hello.hidden = true;
         }
       }
       await sleep(200);
